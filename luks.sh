@@ -1,3 +1,5 @@
+#!/bin/bash
+set -ex
 
 echo "create encrypted.img..."
 dd \
@@ -8,17 +10,17 @@ dd \
 	seek=1G
 
 echo "luksFormat encrypted.img..."
-sudo cryptsetup \
+echo -n "test" | sudo cryptsetup -q\
 	luksFormat \
 	encrypted.img \
-	mykey.keyfile
+    -
 
 echo "luksOpen encrypted.img in myEncryptedVolume..."
-sudo cryptsetup \
+echo -n "test" | sudo cryptsetup \
 	luksOpen \
 	encrypted.img \
 	myEncryptedVolume \
-	--key-file mykey.keyfile
+    -
 
 echo "format myEncryptedVolume..."
 sudo mkfs.ext4 \
@@ -33,14 +35,18 @@ sudo mount \
 	/dev/mapper/myEncryptedVolume \
 	$PRIVATE_DIR/
 
+sudo chown \
+	-R $USER \
+	$PRIVATE_DIR/
+
 echo "run nativescript script..."
-. $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/run-nativescript.sh $PRIVATE_DIR
+. $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/run-nativescript.sh  ||:
 
-echo "umount dir..."
-sudo umount \
-	$PRIVATE_DIR \
+# echo "umount dir..."
+# sudo umount \
+# 	$PRIVATE_DIR \
 
-echo "luksClose myEncryptedVolume..."
-sudo cryptsetup \
-	luksClose \
-	myEncryptedVolume
+# echo "luksClose myEncryptedVolume..."
+# sudo cryptsetup \
+# 	luksClose \
+# 	myEncryptedVolume

@@ -1,9 +1,8 @@
 #!/bin/bash
 set -ex
 
-CUR_DIR=$1
-
-cd $1
+echo "folder is " $PRIVATE_DIR
+cd $PRIVATE_DIR
 echo "create {N} project..."
 tns create test
 
