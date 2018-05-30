@@ -1,6 +1,6 @@
 [luks]
 directory=/home/toma/Private/fio
 nrfiles=500
-size=1000k
+size=5000kb
 bs=1k
 rw=read

@@ -11,5 +11,14 @@ sudo mount -t ecryptfs \
 /$PRIVATE_DIR /$PRIVATE_DIR
 
 
+# echo "run nativescript script..."
+# . $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/run-nativescript.sh  ||:
+
 echo "run nativescript script..."
-. $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/run-nativescript.sh  ||:
+mkdir -p $PRIVATE_DIR/fio
+fio . $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/ecryptfs.fio
+rm -rf $PRIVATE_DIR/fio
+
+sudo umount $PRIVATE_DIR
+
+rm -rf $PRIVATE_DIR

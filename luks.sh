@@ -7,7 +7,7 @@ dd \
 	of=encrypted.img \
 	bs=1 \
 	count=0 \
-	seek=1G
+	seek=5G
 
 echo "luksFormat encrypted.img..."
 echo -n "test" | sudo cryptsetup -q\
@@ -39,14 +39,21 @@ sudo chown \
 	-R $USER \
 	$PRIVATE_DIR/
 
+# echo "run nativescript script..."
+# . $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/run-nativescript.sh  ||:
+
 echo "run nativescript script..."
-. $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/run-nativescript.sh  ||:
+mkdir -p $PRIVATE_DIR/fio
+time fio . $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/luks.fio
+rm -rf $PRIVATE_DIR/fio
 
-# echo "umount dir..."
-# sudo umount \
-# 	$PRIVATE_DIR \
+echo "umount dir..."
+sudo umount \
+	$PRIVATE_DIR \
 
-# echo "luksClose myEncryptedVolume..."
-# sudo cryptsetup \
-# 	luksClose \
-# 	myEncryptedVolume
+echo "luksClose myEncryptedVolume..."
+sudo cryptsetup \
+	luksClose \
+	myEncryptedVolume
+
+rm encrypted.img

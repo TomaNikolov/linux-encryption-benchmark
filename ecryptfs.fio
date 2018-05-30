@@ -1,6 +1,6 @@
 [ecryptfs]
 directory=/home/toma/Privatefs/fio
 nrfiles=500
-size=1000k
+size=5000kb
 bs=1k
 rw=read
